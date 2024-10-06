@@ -244,7 +244,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8df8d7f69c379c345b38dc6d1815906e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  board: {fileID: 5993546519781255178, guid: 4afd10a1b933628469e2c725b91ccd72, type: 3}
 --- !u!4 &1359305273
 Transform:
   m_ObjectHideFlags: 0
@@ -304,7 +303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55ae9a164a03a9f43bf5787eef4fc751, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilePrefab: {fileID: 6480364013113809495, guid: f4e66be321c49694e9fb27fbc9fa30a8, type: 3}
+  tilePrefab: {fileID: -8058456661041066327, guid: f4e66be321c49694e9fb27fbc9fa30a8, type: 3}
   _cam: {fileID: 519420032}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

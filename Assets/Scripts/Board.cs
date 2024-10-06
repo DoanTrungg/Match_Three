@@ -6,8 +6,8 @@ public class Board : MonoBehaviour
 {
     private int height;
     private int width;
-    private GameObject[,] backgroundTile;
-    [SerializeField] private GameObject tilePrefab;
+    private BackgroundTile[,] backgroundTile;
+    [SerializeField] private BackgroundTile tilePrefab;
     [SerializeField] private Transform _cam;
 
     private void Start()
@@ -18,12 +18,14 @@ public class Board : MonoBehaviour
     {
         height = ManagerConfig.ConfigBoard.height;
         width = ManagerConfig.ConfigBoard.width;
-        backgroundTile = new GameObject[width, height];
+        backgroundTile = new BackgroundTile[width, height];
         for (int i = 0; i < width; i++)
         {
             for(int j = 0; j < height; j++)
             {
                 backgroundTile[i,j] = Instantiate(tilePrefab, new Vector2(i, j), Quaternion.identity);
+                backgroundTile[i, j].Initialized();
+                backgroundTile[i, j].gameObject.name = "(" + i + "," + j + ")";
                 backgroundTile[i, j].transform.SetParent(transform);
             }
         }
