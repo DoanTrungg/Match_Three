@@ -6,8 +6,14 @@ public class Board : MonoBehaviour
 {
     private int height;
     private int width;
-    public GameObject tilePrefab;
     private GameObject[,] backgroundTile;
+    [SerializeField] private GameObject tilePrefab;
+    [SerializeField] private Transform _cam;
+
+    private void Start()
+    {
+        SetupBoard();
+    }
     public void SetupBoard()
     {
         height = ManagerConfig.ConfigBoard.height;
@@ -21,6 +27,8 @@ public class Board : MonoBehaviour
                 backgroundTile[i, j].transform.SetParent(transform);
             }
         }
+
+        _cam.transform.position = new Vector3((float)height/2-0.5f,(float)width/2+0.5f,-10);
 
     }
 }
