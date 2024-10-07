@@ -7,11 +7,13 @@ public class BackgroundTile : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer imageDot;
 
-    public void Initialized()
+    public SpriteRenderer ImageDot { get => imageDot; set => imageDot = value; }
+
+    public void Initialize()
     {
         if (ManagerConfig.ConfigBoard.listColor.Count <= 0) return;
-        imageDot.gameObject.SetActive(true);
+        ImageDot.gameObject.SetActive(true);
         int random = Random.Range(0, ManagerConfig.ConfigBoard.listColor.Count);
-        imageDot.color = ManagerConfig.ConfigBoard.listColor[random];
+        ImageDot.color = ManagerConfig.ConfigBoard.listColor[random];
     }
 }

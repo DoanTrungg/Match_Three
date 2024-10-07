@@ -24,9 +24,9 @@ public class Board : MonoBehaviour
             for(int j = 0; j < height; j++)
             {
                 backgroundTile[i,j] = Instantiate(tilePrefab, new Vector2(i, j), Quaternion.identity);
-                backgroundTile[i, j].Initialized();
-                backgroundTile[i, j].gameObject.name = "(" + i + "," + j + ")";
-                backgroundTile[i, j].transform.SetParent(transform);
+                backgroundTile[i,j].Initialize();
+                backgroundTile[i,j].gameObject.name = "(" + i + "," + j + ")";
+                backgroundTile[i,j].transform.SetParent(transform);
             }
         }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Config/ManagerConfig")]
 public class ManagerConfig : SingletonScriptableObject<ManagerConfig>
 {
-    [SerializeField] private ConfigBoard _configBoard;
+    public ConfigBoard _configBoard;
     public static ConfigBoard ConfigBoard { get { return Instance._configBoard; } }
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void FirstInitalizr()
