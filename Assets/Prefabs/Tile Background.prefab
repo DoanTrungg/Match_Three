@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d145f36694ebf841b0f86b0aef96970, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageDot: {fileID: 6802632214330085295}
+  dot: {fileID: 2289614295366046741}
 --- !u!1001 &8996833471472092867
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -156,11 +156,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ae9d2cdf1f3a0641a4b93b8ad63644e, type: 3}
---- !u!212 &6802632214330085295 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 2503123523023030636, guid: 2ae9d2cdf1f3a0641a4b93b8ad63644e, type: 3}
+--- !u!114 &2289614295366046741 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7141992617482605270, guid: 2ae9d2cdf1f3a0641a4b93b8ad63644e, type: 3}
   m_PrefabInstance: {fileID: 8996833471472092867}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c297f0c83eb5d944ad3d93529be3b2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7929222554536979441 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1355985389642411314, guid: 2ae9d2cdf1f3a0641a4b93b8ad63644e, type: 3}

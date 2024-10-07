@@ -8,6 +8,15 @@ public class Dot : MonoBehaviour
     private Vector2 finalTouchPosition;
     private float swipeAngle;
 
+    private SpriteRenderer spriteRenderer;
+
+    public SpriteRenderer SpriteRenderer { get => spriteRenderer; set => spriteRenderer = value; }
+
+    private void Awake()
+    {
+        SpriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
     private void OnMouseDown()
     {
         firstTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
