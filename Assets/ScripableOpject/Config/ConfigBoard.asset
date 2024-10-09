@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f22ab6baf9deec24ba4981e68e8cd1d5, type: 3}
   m_Name: ConfigBoard
   m_EditorClassIdentifier: 
-  width: 3
-  height: 3
+  width: 5
+  height: 2
   listColor:
   - {r: 0.81568635, g: 0.19215688, b: 0.3803922, a: 1}
   - {r: 0.9333334, g: 0.5019608, b: 0.5019608, a: 1}

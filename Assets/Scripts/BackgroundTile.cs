@@ -7,7 +7,7 @@ public class BackgroundTile : MonoBehaviour
 {
     [SerializeField] private Dot _dot;
     private int _column;
-    private int _row; // ngang
+    private int _row;
 
     public int Column { get => _column; set => _column = value; }
     public int Row { get => _row; set => _row = value; }
@@ -23,6 +23,6 @@ public class BackgroundTile : MonoBehaviour
         _dot.gameObject.SetActive(true);
         int random = Random.Range(0, ManagerConfig.ConfigBoard.listColor.Count);
         _dot.GetComponent<SpriteRenderer>().color = ManagerConfig.ConfigBoard.listColor[random];
-        _dot.BackgroundTile = this;
+        _dot.GetComponent<Dot>().BackgroundTile = this;
     }
 }
