@@ -24,5 +24,6 @@ public class BackgroundTile : MonoBehaviour
         int random = Random.Range(0, ManagerConfig.ConfigBoard.listColor.Count);
         _dot.GetComponent<SpriteRenderer>().color = ManagerConfig.ConfigBoard.listColor[random];
         _dot.GetComponent<Dot>().BackgroundTile = this;
+        _dot.GetComponent<Dot>().Id = (ID)random;
     }
 }

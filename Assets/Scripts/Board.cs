@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,7 +26,6 @@ public class Board : MonoBehaviour
             Debug.LogError("Multiple instances of Board detected! Stopping execution.");
             Debug.Break();
         }
-
     }
 
     private void Start()
@@ -46,9 +46,7 @@ public class Board : MonoBehaviour
                 SetBackgroundTile(ListBackgroundTile[i, j], i, j, transform);
             }
         }
-
-        _cam.transform.position = new Vector3((float)Width / 2 - 0.5f, (float)Width / 2 + 0.5f, -10);
-
+          _cam.transform.position = new Vector3((float)Width / 2 - 0.5f, (float)Width / 2 + 0.5f, -10);
     }
 
     private void SetBackgroundTile(BackgroundTile backgroundTile, int width, int height, Transform transform)
@@ -61,18 +59,22 @@ public class Board : MonoBehaviour
     }
     public void SwapDots(BackgroundTile tileA, BackgroundTile tileB)
     {
-        tileA.Dot.transform.SetParent(tileB.transform);
-        tileA.Dot.transform.localPosition = Vector3.zero;
-
-        tileB.Dot.transform.SetParent(tileA.transform);
-        tileB.Dot.transform.localPosition = Vector3.zero;
-
         Dot tempDot = tileA.Dot;
-        tileA.Dot = tileB.Dot;
-        tileB.Dot = tempDot;
 
-        if (tileA.Dot != null) tileA.Dot.BackgroundTile = tileA;
-        if (tileB.Dot != null) tileB.Dot.BackgroundTile = tileB;
+        tileA.Dot.transform.DOMove(tileB.transform.position, 0.4f).OnComplete(() =>
+        {
+            tileA.Dot.transform.SetParent(tileB.transform);
+            tileA.Dot.transform.localPosition = Vector3.zero;
+            tileA.Dot = tileB.Dot;
+            if (tileA.Dot != null) tileA.Dot.BackgroundTile = tileA;
+        });
 
+        tileB.Dot.transform.DOMove(tileA.transform.position, 0.4f).OnComplete(() =>
+        {
+            tileB.Dot.transform.SetParent(tileA.transform);
+            tileB.Dot.transform.localPosition = Vector3.zero;
+            tileB.Dot = tempDot;
+            if (tileB.Dot != null) tileB.Dot.BackgroundTile = tileB;
+        });
     }
 }

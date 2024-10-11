@@ -23,6 +23,7 @@ public class InputManager : MonoBehaviour
     private void OnMouseDown()
     {
         startPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Debug.Log("ID : " + _dot.Id);
     }
     private void OnMouseUp()
     {
@@ -61,7 +62,7 @@ public class InputManager : MonoBehaviour
                 if (column < _board.Height - 1) _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row, column + 1]);
                 break;
             case Direction.Down:
-                if(column > 0) _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row, column - 1]);
+                if (column > 0) _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row, column - 1]);
                 break;
             default:
                 Debug.Log("Dont Swap");
