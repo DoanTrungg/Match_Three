@@ -24,10 +24,6 @@ public class InputManager : MonoBehaviour
     {
         startPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Debug.Log("ID : " + _dot.Id);
-        if (_dot.BackgroundTile.Row + 1 == _board.Width)
-        {
-            Debug.Log("ko co");
-        }
     }
     private void OnMouseUp()
     {

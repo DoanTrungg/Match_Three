@@ -15,6 +15,8 @@ public class Board : MonoBehaviour
     public int Height { get => _height; set => _height = value; }
     public int Width { get => _width; set => _width = value; }
 
+    int countMatch;
+
     private void Awake()
     {
         if (Instance == null)
@@ -30,6 +32,7 @@ public class Board : MonoBehaviour
 
     private void Start()
     {
+        countMatch = 0;
         Height = ManagerConfig.ConfigBoard.height;
         Width = ManagerConfig.ConfigBoard.width;
         ListBackgroundTile = new BackgroundTile[Width, Height];
@@ -87,33 +90,87 @@ public class Board : MonoBehaviour
         int currentRow = dot.BackgroundTile.Row;
         int currentColumn = dot.BackgroundTile.Column;
 
-        if (currentRow > 0 && currentRow < Width - 1) // 0 x 0 - Width
+        if (UnMatching(dot, ListBackgroundTile[currentRow - 1, currentColumn].Dot, true)) // Right_Row
         {
-            int nextRow = dot.BackgroundTile.Row + 1;
-            int previousRow = dot.BackgroundTile.Row - 1;
-            if (dot.Id == ID.None || ListBackgroundTile[nextRow, currentColumn].Dot.Id == ID.None || ListBackgroundTile[previousRow, currentColumn].Dot.Id == ID.None) return;
-            if (dot.Id == ListBackgroundTile[nextRow, currentColumn].Dot.Id &&
-               dot.Id == ListBackgroundTile[previousRow, currentColumn].Dot.Id)
+            if (MatchingRowColumn(dot, MatchStatus.RIGHT_ROW) == 2)
             {
-                Matched(dot);
-                Matched(ListBackgroundTile[nextRow, currentColumn].Dot);
-                Matched(ListBackgroundTile[previousRow, currentColumn].Dot);
+                for (int rowMatch = 0; rowMatch < 3; rowMatch++)
+                {
+                    Matched(ListBackgroundTile[currentRow + rowMatch, currentColumn].Dot);
+                }
+                countMatch = 0;
             }
         }
-        if (currentColumn > 0 && currentColumn < Height - 1) // 0 x 0 - Height
+        if (UnMatching(dot, ListBackgroundTile[currentRow + 1, currentColumn].Dot, true)) // Left_Row
         {
-            int nextColumn = dot.BackgroundTile.Column + 1;
-            int previousColumn = dot.BackgroundTile.Column - 1;
-            if (dot.Id == ID.None || ListBackgroundTile[currentRow, nextColumn].Dot.Id == ID.None || ListBackgroundTile[currentRow, previousColumn].Dot.Id == ID.None) return;
-            if (dot.Id == ListBackgroundTile[currentRow, nextColumn].Dot.Id &&
-               dot.Id == ListBackgroundTile[currentRow, previousColumn].Dot.Id)
+            if (MatchingRowColumn(dot, MatchStatus.LEFT_ROW) == 2)
             {
-                Matched(dot);
-                Matched(ListBackgroundTile[currentRow, nextColumn].Dot);
-                Matched(ListBackgroundTile[currentRow, previousColumn].Dot);
+                for (int rowMatch = 0; rowMatch < 3; rowMatch++)
+                {
+                    Matched(ListBackgroundTile[currentRow - rowMatch, currentColumn].Dot);
+                }
+                countMatch = 0;
             }
         }
 
+    }
+    private bool UnMatching(Dot currentDot, Dot newDot, bool row)
+    {
+        ID idCurrentDot = currentDot.Id;
+        if (row)
+        {
+            if ((newDot.BackgroundTile.Row >= 0 || newDot.BackgroundTile.Row < Width) && newDot.Id != idCurrentDot)
+            {
+                return true;
+            }
+            else return false;
+        }
+        else
+        {
+            if ((newDot.BackgroundTile.Column >= 0 || newDot.BackgroundTile.Column < Height) && newDot.Id != idCurrentDot)
+            {
+                return true;
+            }
+            else return false;
+        }
+    }
+    private int MatchingRowColumn(Dot dot, MatchStatus matchStatus)
+    {
+        ID currentId = dot.Id;
+        switch (matchStatus)
+        {
+            case MatchStatus.RIGHT_ROW:
+                for (int nextRow = 1; nextRow < 3; nextRow++)
+                { 
+                    if (dot.BackgroundTile.Row + nextRow < Width && ListBackgroundTile[dot.BackgroundTile.Row + nextRow, dot.BackgroundTile.Column].Dot.Id == currentId)
+                    {
+                        countMatch++;
+                    }
+                    else
+                    {
+                        countMatch = 0;
+                        break;
+                    }
+                }
+                break;
+            case MatchStatus.LEFT_ROW:
+                for (int previousRow = 1; previousRow < 3; previousRow++)
+                {
+                    if (dot.BackgroundTile.Row - previousRow >= 0 && ListBackgroundTile[dot.BackgroundTile.Row - previousRow, dot.BackgroundTile.Column].Dot.Id == currentId)
+                    {
+                        countMatch++;
+                    }
+                    else
+                    {
+                        countMatch = 0;
+                        break;
+                    }
+                }
+                break;
+            default: 
+                break;
+        }
+        return countMatch;
     }
     private void Matched(Dot dot)
     {
