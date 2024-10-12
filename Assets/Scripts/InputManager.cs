@@ -24,6 +24,10 @@ public class InputManager : MonoBehaviour
     {
         startPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Debug.Log("ID : " + _dot.Id);
+        if (_dot.BackgroundTile.Row + 1 == _board.Width)
+        {
+            Debug.Log("ko co");
+        }
     }
     private void OnMouseUp()
     {
@@ -50,24 +54,37 @@ public class InputManager : MonoBehaviour
         int row = _dot.BackgroundTile.Row;
         int column = _dot.BackgroundTile.Column;
         Direction direction = SwipegGesture();
-        switch(direction)
+        switch (direction)
         {
             case Direction.Right:
-                if (row < _board.Width - 1) _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row + 1, column]);
+                if (row < _board.Width - 1)
+                {
+                    _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row + 1, column]);
+                }
                 break;
             case Direction.Left:
-                if (row > 0) _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row - 1, column]);
+                if (row > 0)
+                {
+                    _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row - 1, column]);
+                }
                 break;
             case Direction.Up:
-                if (column < _board.Height - 1) _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row, column + 1]);
+                if (column < _board.Height - 1) 
+                { 
+                    _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row, column + 1]);
+                }
                 break;
             case Direction.Down:
-                if (column > 0) _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row, column - 1]);
+                if (column > 0)
+                {
+                    _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row, column - 1]);
+                }
                 break;
             default:
                 Debug.Log("Dont Swap");
                 break;
         }
+
     }
     
 
