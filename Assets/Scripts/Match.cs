@@ -31,8 +31,13 @@ public class Match : MonoBehaviour
         int currentRow = dot.BackgroundTile.Row;
         int currentColumn = dot.BackgroundTile.Column;
 
-
-
+        MatchRightRow(dot, currentRow, currentColumn);
+        MatchLeftRow(dot, currentRow, currentColumn);
+        MatchHeadColumn(dot,currentRow, currentColumn);
+        MatchTailColumn(dot, currentRow, currentColumn);
+    }
+    private void MatchRightRow(Dot dot, int currentRow, int currentColumn)
+    {
         int minRow = currentRow == 0 ? 1 : -1;
         if (UnMatching(dot, _board.ListBackgroundTile[currentRow + (minRow == 1 ? 0 : -1), currentColumn].Dot, true))
         {
@@ -45,7 +50,9 @@ public class Match : MonoBehaviour
                 countMatch = 0;
             }
         }
-
+    }
+    private void MatchLeftRow(Dot dot, int currentRow, int currentColumn)
+    {
         int maxRow = currentRow == _width - 1 ? 1 : -1;
         if (UnMatching(dot, _board.ListBackgroundTile[currentRow + (maxRow == 1 ? 0 : 1), currentColumn].Dot, true)) // Left_Row
         {
@@ -58,20 +65,24 @@ public class Match : MonoBehaviour
                 countMatch = 0;
             }
         }
-
+    }
+    private void MatchHeadColumn(Dot dot, int currentRow, int currentColumn)
+    {
         int minColumn = currentColumn == 0 ? 1 : -1;
-        if (UnMatching(dot, _board.ListBackgroundTile[currentRow, currentColumn + (minColumn == 1  ? 0 : -1)].Dot, false))
+        if (UnMatching(dot, _board.ListBackgroundTile[currentRow, currentColumn + (minColumn == 1 ? 0 : -1)].Dot, false))
         {
-            if(MatchingRowColumn(dot, MatchStatus.HEAD_COLUMN) == 2)
+            if (MatchingRowColumn(dot, MatchStatus.HEAD_COLUMN) == 2)
             {
-                for(int columnMatch = 0; columnMatch < 3; columnMatch++)
+                for (int columnMatch = 0; columnMatch < 3; columnMatch++)
                 {
                     Matched(_board.ListBackgroundTile[currentRow, currentColumn + columnMatch].Dot);
                 }
                 countMatch = 0;
             }
         }
-
+    }
+    private void MatchTailColumn(Dot dot,int currentRow, int currentColumn)
+    {
         int maxColumn = currentColumn == _height - 1 ? 1 : -1;
         if (UnMatching(dot, _board.ListBackgroundTile[currentRow, currentColumn + (maxColumn == 1 ? 0 : 1)].Dot, false))
         {
