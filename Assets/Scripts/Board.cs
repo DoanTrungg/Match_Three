@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Board : MonoBehaviour
+public class Board : Singleton<Board>
 {
     private int _height;
     private int _width;
@@ -12,26 +12,10 @@ public class Board : MonoBehaviour
     [SerializeField] private BackgroundTile tilePrefab;
     [SerializeField] private Transform _cam;
     [SerializeField] private Match match;
-    public static Board Instance { get; private set; }
+    //public static Board Instance { get; private set; }
     public BackgroundTile[,] ListBackgroundTile { get => _listBackgroundTile; set => _listBackgroundTile = value; }
     public int Height { get => _height; set => _height = value; }
     public int Width { get => _width; set => _width = value; }
-
-    
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else if (Instance != this)
-        {
-            Debug.LogError("Multiple instances of Board detected! Stopping execution.");
-            Debug.Break();
-        }
-        DontDestroyOnLoad(gameObject);
-    }
 
     private void Start()
     {

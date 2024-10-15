@@ -17,7 +17,7 @@ public class InputManager : MonoBehaviour
     {
         direction = Direction.None;
         _dot = GetComponent<Dot>();
-        _board = Board.Instance.GetComponent<Board>();
+        _board = Board.Instance();
     }
 
     private void OnMouseDown()
