@@ -15,7 +15,7 @@ public class Dot : MonoBehaviour
     public BackgroundTile BackgroundTile { get => _backgroundTile; set => _backgroundTile = value; }
     public ID Id { get => _id; set => _id = value; }
     public bool Matched { get => _matched; set => _matched = value; }
-    public void FadeIn(float duration)
+    public Tween FadeIn(float duration)
     {
         Sequence sequence = DOTween.Sequence();
         sequence.Append(transform.DOScale(1, duration));
@@ -24,8 +24,9 @@ public class Dot : MonoBehaviour
             canvasGroup.interactable = true;
             canvasGroup.blocksRaycasts = true;
         }));
+        return sequence;
     }
-    public void FadeOut(float duration)
+    public Tween FadeOut(float duration)
     {
         Sequence sequence = DOTween.Sequence();
         sequence.Append(transform.DOScale(0, duration));
@@ -34,6 +35,7 @@ public class Dot : MonoBehaviour
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
         }));
+        return sequence;
     }
 
     private Tween Fade(float endValue, float duration, TweenCallback onEnd)

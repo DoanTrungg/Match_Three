@@ -12,10 +12,12 @@ public class Board : Singleton<Board>
     [SerializeField] private BackgroundTile tilePrefab;
     [SerializeField] private Transform _cam;
     [SerializeField] private Match match;
+    [SerializeField] private FillDot fillDot;
     //public static Board Instance { get; private set; }
     public BackgroundTile[,] ListBackgroundTile { get => _listBackgroundTile; set => _listBackgroundTile = value; }
     public int Height { get => _height; set => _height = value; }
     public int Width { get => _width; set => _width = value; }
+    public FillDot FillDot { get => fillDot; set => fillDot = value; }
 
     private void Start()
     {
@@ -50,7 +52,7 @@ public class Board : Singleton<Board>
     {
         Dot tempDot = tileA.Dot;
         ID tempId = tileA.Dot.Id;
-
+        if (tileA.Dot.Id == ID.None || tileB.Dot.Id == ID.None) return;
         tileA.Dot.transform.DOMove(tileB.transform.position, 0.4f).OnStart(() =>
         {
             tileA.Dot.transform.SetParent(tileB.transform);
@@ -59,7 +61,7 @@ public class Board : Singleton<Board>
             tileA.Dot.Id = tileB.Dot.Id; // update property
             if (tileA.Dot != null) tileA.Dot.BackgroundTile = tileA; // update children
 
-        }).OnComplete(() => match.FindMidMatches(tileA.Dot));
+        }).OnComplete(() => match.FindMatch(tileA.Dot));
 
         tileB.Dot.transform.DOMove(tileA.transform.position, 0.4f).OnStart(() =>
         {
@@ -69,7 +71,23 @@ public class Board : Singleton<Board>
             tileB.Dot.Id = tempId; // update property
             if (tileB.Dot != null) tileB.Dot.BackgroundTile = tileB; // update children 
 
-        }).OnComplete(() => match.FindMidMatches(tileB.Dot));
-    }
+        }).OnComplete(() => match.FindMatch(tileB.Dot));
     
+}
+    public void UpdateInfor(BackgroundTile tileA, BackgroundTile tileB)
+    {
+        Dot tempDot = tileA.Dot;
+        ID tempId = tileA.Dot.Id;
+
+        tileA.Dot.transform.SetParent(tileB.transform);
+        tileA.Dot = tileB.Dot;
+        tileA.Dot.Id = tileB.Dot.Id;
+        tileA.Dot.BackgroundTile = tileA;
+
+        tileB.Dot.transform.SetParent(tileA.transform);
+        tileB.Dot = tempDot;
+        tileB.Dot.Id = tempId;
+        tileB.Dot.BackgroundTile = tileB;
+    }
+
 }

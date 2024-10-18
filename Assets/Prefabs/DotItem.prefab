@@ -161,4 +161,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dot: {fileID: 7141992617482605270}
-  swipeThreshold: 0.4
+  swipeThreshold: 0.5

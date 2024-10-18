@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -7,14 +8,16 @@ public class Match : MonoBehaviour
 {
     [SerializeField] private float durationFade;
     private Board _board;
+    private PoolManager _poolManager;
     private int _width;
     private int _height;
     private int countMatch;
-    private HashSet<Dot> _listMatched = new HashSet<Dot>();
+    private List<Dot> _listMatched = new List<Dot>();
     private void Start()
     {
-        _board = Board.Instance(); 
-        if (_board == null)
+        _board = Board.Instance();
+        _poolManager = PoolManager.Instance();
+        if (_board == null || _poolManager == null)
         {
             Debug.LogError("Board instance is null!");
             return;
@@ -24,7 +27,7 @@ public class Match : MonoBehaviour
         _height = ManagerConfig.ConfigBoard.height;
     }
 
-    public void FindMidMatches(Dot dot)
+    public void FindMatch(Dot dot)
     {
         bool matchRightRow = MatchRightRow(dot);
         bool matchLeftRow = MatchLeftRow(dot);
@@ -44,22 +47,25 @@ public class Match : MonoBehaviour
         {
             int countMatchHead = MatchingRowColumn(dot, MatchStatus.HEAD_COLUMN);
             int countMatchTail = MatchingRowColumn(dot, MatchStatus.TAIL_COLUMN);
-            if (countMatchHead > 0)
-            {
-                for (int columnMatch = 0; columnMatch <= countMatchHead; columnMatch++)
-                {
-                    _listMatched.Add(_board.ListBackgroundTile[currentRow, currentColumn + columnMatch].Dot);
-                }
-                countMatch = 0;
-            }
             if (countMatchTail > 0)
             {
-                for (int columnMatch = 0; columnMatch <= countMatchTail; columnMatch++)
+                for (int columnMatch = countMatchTail; columnMatch >= 0; columnMatch--)
                 {
                     _listMatched.Add(_board.ListBackgroundTile[currentRow, currentColumn - columnMatch].Dot);
                 }
                 countMatch = 0;
             }
+            if (countMatchHead > 0)
+            {
+                for (int columnMatch = 1; columnMatch <= countMatchHead; columnMatch++)
+                {
+                    _listMatched.Add(_board.ListBackgroundTile[currentRow, currentColumn + columnMatch].Dot);
+                }
+                countMatch = 0;
+            }
+            
+            
+            
         }
     }
     private void MatchMidRow(bool matchRight,bool matchLeft,Dot dot)
@@ -153,7 +159,7 @@ public class Match : MonoBehaviour
         {
             if (MatchingRowColumn(dot, MatchStatus.TAIL_COLUMN) == 2)
             {
-                for (int columnMatch = 0; columnMatch < 3; columnMatch++)
+                for (int columnMatch = 2; columnMatch >= 0; columnMatch--)
                 {
                     _listMatched.Add(_board.ListBackgroundTile[currentRow, currentColumn - columnMatch].Dot);
                 }
@@ -215,7 +221,7 @@ public class Match : MonoBehaviour
             case MatchStatus.HEAD_COLUMN:
                 for(int nextColum = 1; nextColum < 3; nextColum++)
                 {
-                    if(currentColumn + nextColum < _height && _board.ListBackgroundTile[currentRow, currentColumn + nextColum].Dot.Id == currentId)
+                    if (currentColumn + nextColum < _height && _board.ListBackgroundTile[currentRow, currentColumn + nextColum].Dot.Id == currentId)
                     {
                         countMatch++;
                     }
@@ -224,7 +230,7 @@ public class Match : MonoBehaviour
             case MatchStatus.TAIL_COLUMN:
                 for(int previous = 1; previous < 3; previous++)
                 {
-                    if(currentColumn - previous >= 0 && _board.ListBackgroundTile[currentRow, currentColumn - previous].Dot.Id == currentId)
+                    if (currentColumn - previous >= 0 && _board.ListBackgroundTile[currentRow, currentColumn - previous].Dot.Id == currentId)
                     {
                         countMatch++;
                     }
@@ -236,25 +242,27 @@ public class Match : MonoBehaviour
 
         return countMatch;
     }
-    private void Matched(HashSet<Dot> listMatched)
+    private void Matched(List<Dot> listMatched)
     {
-        if (listMatched.Count < 3 || listMatched == null) return;
-        foreach(Dot dot in listMatched)
+        if (listMatched.Count < 3) return;
+        for (int i = listMatched.Count - 1; i >= 0; i--)
         {
-            DestroyDot(dot);
+            Dot dot = listMatched[i];
+            if(dot.Id == ID.None) continue;
+            DestroyDot(dot).OnComplete(() =>
+            {
+                _board.FillDot.Fill(dot);
+                _poolManager.HideDot(dot);
+            });
         }
         listMatched.Clear();
+        
     }
-    private void DestroyDot(Dot dot)
+    private Tween DestroyDot(Dot dot)
     {
-        int row = dot.BackgroundTile.Row;
-        int column = dot.BackgroundTile.Column;
-
-        _board.ListBackgroundTile[row, column].Dot = null;
         dot.Matched = true;
         dot.Id = ID.None;
-        dot.BackgroundTile = null;
-        dot.FadeOut(durationFade);
+        return dot.FadeOut(durationFade);
     }
 }
 public enum MatchStatus
