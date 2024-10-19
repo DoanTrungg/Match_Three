@@ -1,5 +1,4 @@
 using DG.Tweening;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -8,6 +7,7 @@ using UnityEngine;
 public class FillDot : MonoBehaviour
 {
     private Board _board;
+    private PoolManager _poolManager;
     private List<Dot> _listDotExist = new List<Dot>();
 
     public List<Dot> ListDotExist { get => _listDotExist; set => _listDotExist = value; }
@@ -15,6 +15,7 @@ public class FillDot : MonoBehaviour
     private void Start()
     {
         _board = Board.Instance();
+        _poolManager = PoolManager.Instance();
     }
     private List<Dot> DotsExist(Dot dot)
     {
@@ -46,11 +47,26 @@ public class FillDot : MonoBehaviour
         list.Clear();
 
     }
-    public void CheckEmpty(Dot dot)
+    public void GetNewDot(Dot dot)
     {
-        int currentRow = dot.BackgroundTile.Row;
-        int currentColumn = dot.BackgroundTile.Column;
+        Dot newDot = _poolManager.ListPool[0];
+        _poolManager.ListPool.Remove(newDot);
 
+        int random = Random.Range(0, ManagerConfig.ConfigBoard.listColor.Count);
+        int row = newDot.BackgroundTile.Row;
+        newDot.FadeIn(0.4f).OnStart(() =>
+        {
+            newDot.transform.SetParent(_board.ListBackgroundTile[dot.BackgroundTile.Row, _board.Height - 1].transform);
+            newDot.transform.localPosition = Vector2.zero;
+
+            newDot.GetComponent<SpriteRenderer>().color = ManagerConfig.ConfigBoard.listColor[random];
+            newDot.GetComponent<Dot>().BackgroundTile = _board.ListBackgroundTile[dot.BackgroundTile.Row, _board.Height - 1];
+            newDot.GetComponent<Dot>().Id = (ID)random;
+            newDot.Matched = false;
+
+            _board.UpdateInfor(newDot.BackgroundTile, _board.ListBackgroundTile[dot.BackgroundTile.Row, _board.Height - 1]);
+        });
+        
 
     }
 

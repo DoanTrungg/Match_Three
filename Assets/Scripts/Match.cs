@@ -253,6 +253,7 @@ public class Match : MonoBehaviour
             {
                 _board.FillDot.Fill(dot);
                 _poolManager.HideDot(dot);
+                //_board.FillDot.GetNewDot(dot);
             });
         }
         listMatched.Clear();

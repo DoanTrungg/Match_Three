@@ -67,7 +67,8 @@ public class InputManager : MonoBehaviour
             case Direction.Up:
                 if (column < _board.Height - 1) 
                 { 
-                    _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row, column + 1]);
+                    //_board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row, column + 1]);
+                    _board.SwapDots(_board.ListBackgroundTile[row, column + 1], _board.ListBackgroundTile[row, column]);
                 }
                 break;
             case Direction.Down:
