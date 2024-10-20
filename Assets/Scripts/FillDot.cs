@@ -47,27 +47,45 @@ public class FillDot : MonoBehaviour
         list.Clear();
 
     }
-    public void GetNewDot(Dot dot)
+    public Dot GetNewDot()
     {
         Dot newDot = _poolManager.ListPool[0];
         _poolManager.ListPool.Remove(newDot);
 
-        int random = Random.Range(0, ManagerConfig.ConfigBoard.listColor.Count);
         int row = newDot.BackgroundTile.Row;
-        newDot.FadeIn(0.4f).OnStart(() =>
-        {
-            newDot.transform.SetParent(_board.ListBackgroundTile[dot.BackgroundTile.Row, _board.Height - 1].transform);
-            newDot.transform.localPosition = Vector2.zero;
-
-            newDot.GetComponent<SpriteRenderer>().color = ManagerConfig.ConfigBoard.listColor[random];
-            newDot.GetComponent<Dot>().BackgroundTile = _board.ListBackgroundTile[dot.BackgroundTile.Row, _board.Height - 1];
-            newDot.GetComponent<Dot>().Id = (ID)random;
-            newDot.Matched = false;
-
-            _board.UpdateInfor(newDot.BackgroundTile, _board.ListBackgroundTile[dot.BackgroundTile.Row, _board.Height - 1]);
-        });
         
+        newDot.FadeIn(0.05f);
+        UpdateNewDot(row, newDot);
+        return newDot;
+    }
+    private void UpdateNewDot(int currentRow, Dot newDot)
+    {
+        int random = Random.Range(0, ManagerConfig.ConfigBoard.listColor.Count);
 
+        // position
+        newDot.transform.SetParent(_board.ListBackgroundTile[currentRow, _board.Height - 1].transform);
+        newDot.transform.localPosition = Vector2.zero;
+
+        // properties
+        newDot.GetComponent<SpriteRenderer>().color = ManagerConfig.ConfigBoard.listColor[random];
+        newDot.GetComponent<Dot>().BackgroundTile = _board.ListBackgroundTile[currentRow, _board.Height - 1];
+        newDot.GetComponent<Dot>().Id = (ID)random;
+        newDot.Matched = false;
+        _board.UpdateInfor(newDot.BackgroundTile, _board.ListBackgroundTile[currentRow, _board.Height - 1]);
+    }
+    private int NumberChangeColum(Dot dot)
+    {
+        int number = 0;
+        int row = dot.BackgroundTile.Row;
+        int column = dot.BackgroundTile.Column;
+        for(int i = 1; i < _board.Height - 1; i++)
+        {
+            if (_board.ListBackgroundTile[row, column - i].Dot.Id == ID.None)
+            {
+                number++;
+            }
+        }
+        return number;
     }
 
 }

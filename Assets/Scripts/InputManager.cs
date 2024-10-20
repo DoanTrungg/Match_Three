@@ -55,26 +55,25 @@ public class InputManager : MonoBehaviour
             case Direction.Right:
                 if (row < _board.Width - 1)
                 {
-                    _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row + 1, column]);
+                    _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row + 1, column], true);
                 }
                 break;
             case Direction.Left:
                 if (row > 0)
                 {
-                    _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row - 1, column]);
+                    _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row - 1, column], true);
                 }
                 break;
             case Direction.Up:
                 if (column < _board.Height - 1) 
                 { 
-                    //_board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row, column + 1]);
-                    _board.SwapDots(_board.ListBackgroundTile[row, column + 1], _board.ListBackgroundTile[row, column]);
+                    _board.SwapDots(_board.ListBackgroundTile[row, column + 1], _board.ListBackgroundTile[row, column], true);
                 }
                 break;
             case Direction.Down:
                 if (column > 0)
                 {
-                    _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row, column - 1]);
+                    _board.SwapDots(_board.ListBackgroundTile[row, column], _board.ListBackgroundTile[row, column - 1], true);
                 }
                 break;
             default:

@@ -36,7 +36,7 @@ public class Match : MonoBehaviour
 
         MatchMidRow(matchRightRow, matchLeftRow, dot);
         MatchMidColum(matchHeadColumn, matchTailColumn, dot);
-        
+
         Matched(_listMatched);
     }
     private void MatchMidColum(bool matchHead, bool matchTail, Dot dot)
@@ -63,12 +63,12 @@ public class Match : MonoBehaviour
                 }
                 countMatch = 0;
             }
-            
-            
-            
+
+
+
         }
     }
-    private void MatchMidRow(bool matchRight,bool matchLeft,Dot dot)
+    private void MatchMidRow(bool matchRight, bool matchLeft, Dot dot)
     {
         int currentRow = dot.BackgroundTile.Row;
         int currentColumn = dot.BackgroundTile.Column;
@@ -78,7 +78,7 @@ public class Match : MonoBehaviour
             int countMatchLeft = MatchingRowColumn(dot, MatchStatus.LEFT_ROW);
             if (countMatchRight > 0)
             {
-                for(int rowMatch = 0; rowMatch <= countMatchRight; rowMatch++)
+                for (int rowMatch = 0; rowMatch <= countMatchRight; rowMatch++)
                 {
                     _listMatched.Add(_board.ListBackgroundTile[currentRow + rowMatch, currentColumn].Dot);
                 }
@@ -129,7 +129,8 @@ public class Match : MonoBehaviour
                 countMatch = 0;
             }
             return true;
-        }else return false;
+        }
+        else return false;
     }
     private bool MatchHeadColumn(Dot dot)
     {
@@ -205,7 +206,7 @@ public class Match : MonoBehaviour
                     {
                         countMatch++;
                     }
-                    
+
                 }
                 break;
             case MatchStatus.LEFT_ROW:
@@ -215,11 +216,11 @@ public class Match : MonoBehaviour
                     {
                         countMatch++;
                     }
-                   
+
                 }
                 break;
             case MatchStatus.HEAD_COLUMN:
-                for(int nextColum = 1; nextColum < 3; nextColum++)
+                for (int nextColum = 1; nextColum < 3; nextColum++)
                 {
                     if (currentColumn + nextColum < _height && _board.ListBackgroundTile[currentRow, currentColumn + nextColum].Dot.Id == currentId)
                     {
@@ -228,7 +229,7 @@ public class Match : MonoBehaviour
                 }
                 break;
             case MatchStatus.TAIL_COLUMN:
-                for(int previous = 1; previous < 3; previous++)
+                for (int previous = 1; previous < 3; previous++)
                 {
                     if (currentColumn - previous >= 0 && _board.ListBackgroundTile[currentRow, currentColumn - previous].Dot.Id == currentId)
                     {
@@ -248,16 +249,26 @@ public class Match : MonoBehaviour
         for (int i = listMatched.Count - 1; i >= 0; i--)
         {
             Dot dot = listMatched[i];
-            if(dot.Id == ID.None) continue;
+            if (dot.Id == ID.None) continue;
             DestroyDot(dot).OnComplete(() =>
             {
-                _board.FillDot.Fill(dot);
-                _poolManager.HideDot(dot);
-                //_board.FillDot.GetNewDot(dot);
+                Sequence sequence = DOTween.Sequence();
+
+                // Thêm _board.FillDot.Fill(dot) vào chuỗi (giả sử nó có thể trả về một Tween)
+                sequence.AppendCallback(() => _board.FillDot.Fill(dot));
+
+                // Thêm _poolManager.HideDot(dot) vào chuỗi
+                sequence.AppendCallback(() => _poolManager.HideDot(dot));
+
+                // Khi 2 hàm trên chạy xong, thêm hàm thứ ba
+                sequence.OnComplete(() => 
+                {
+                    _board.FillDot.GetNewDot();
+                });
             });
         }
         listMatched.Clear();
-        
+
     }
     private Tween DestroyDot(Dot dot)
     {

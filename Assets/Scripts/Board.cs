@@ -48,11 +48,11 @@ public class Board : Singleton<Board>
         backgroundTile.Column = height;
         backgroundTile.transform.SetParent(transform);
     }
-    public void SwapDots(BackgroundTile tileA, BackgroundTile tileB)
+    public void SwapDots(BackgroundTile tileA, BackgroundTile tileB, bool interact)
     {
         Dot tempDot = tileA.Dot;
         ID tempId = tileA.Dot.Id;
-        if (tileA.Dot.Id == ID.None || tileB.Dot.Id == ID.None) return;
+        if (interact && (tileA.Dot.Id == ID.None || tileB.Dot.Id == ID.None)) return;
         tileA.Dot.transform.DOMove(tileB.transform.position, 0.4f).OnStart(() =>
         {
             tileA.Dot.transform.SetParent(tileB.transform);
