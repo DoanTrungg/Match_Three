@@ -78,7 +78,7 @@ public class Match : MonoBehaviour
             int countMatchLeft = MatchingRowColumn(dot, MatchStatus.LEFT_ROW);
             if (countMatchRight > 0)
             {
-                for (int rowMatch = 0; rowMatch <= countMatchRight; rowMatch++)
+                for (int rowMatch = 1; rowMatch <= countMatchRight; rowMatch++)
                 {
                     _listMatched.Add(_board.ListBackgroundTile[currentRow + rowMatch, currentColumn].Dot);
                 }
@@ -249,6 +249,8 @@ public class Match : MonoBehaviour
         for (int i = listMatched.Count - 1; i >= 0; i--)
         {
             Dot dot = listMatched[i];
+            int row = dot.BackgroundTile.Row;
+            int column = dot.BackgroundTile.Column;
             if (dot.Id == ID.None) continue;
             DestroyDot(dot).OnComplete(() =>
             {
